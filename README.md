@@ -1,0 +1,87 @@
+# 一副透镜牌 · 中文版 (A Deck of Lenses, 中文)
+
+Jesse Schell《游戏设计艺术》配套「透镜牌」网页应用的简体中文版。
+
+仓库只包含代码与译文，**不包含任何插画文件**——牌面插图、牌背、示例图在运行时直接向官方站点 <https://deck.artofgamedesign.com/> 请求。因此文字部分可离线使用，看图需要联网。
+
+## 打开
+
+```bash
+git clone https://github.com/Cinatas/A-Deck-of-Lenses-In-Chinese.git
+cd A-Deck-of-Lenses-In-Chinese
+./serve.sh            # 默认 8899 端口，也可 ./serve.sh 8080
+```
+
+浏览器访问 **http://127.0.0.1:8899/** 即可（默认就是中文）。
+
+`serve.sh` 只是 `python3 -m http.server` 的包装，把 `deck-zh/` 目录托管到本地；用任何静态服务器（nginx、caddy、`npx serve`）指向 `deck-zh/` 也一样。
+
+页面是竖屏手机比例，桌面浏览器建议把窗口收窄，或直接用手机/平板访问。右上角语言下拉可在 **简体中文 / English / 日本語** 之间切换。
+
+> 必须用本地 HTTP 服务打开，直接双击 `index.html`（file:// 协议）会因为浏览器安全策略拿不到牌库数据。
+
+## 翻译范围
+
+| 内容 | 数量 | 状态 |
+|---|---|---|
+| 透镜卡正文（标题、引导语、问题） | 116 张 / 451 个问题 | 全部译完 |
+| 界面文案（按钮、菜单、排序、分类） | 51 条 | 全部译完 |
+| 使用说明三页（怎么设计游戏 / 怎么用牌 / 怎么获得原著） | 3 页 | 全部译完 |
+| 牌面插画 | 116 幅 | **不入库**，外链官方站点加载 |
+| 画师署名、品牌与人名 | — | 保留原文（署名属于作品信息，不译） |
+| 商品照片里印着的英文 | 2 张产品图 | 保留（实体商品实拍，不可改） |
+
+术语按《游戏设计艺术》中译本习惯统一：lens=透镜、Experience=体验、Player=玩家、Process=流程、Mechanics=机制、Endgame 类词用「内生价值/元素四分法/全息设计」等既有译法。
+
+## 目录
+
+```
+artofgamedesign/
+├── deck-zh/                 # 中文版整站（可直接拷走、放到任意静态服务器）
+│   ├── index.html
+│   ├── assets/strings/zh.json   # 中文牌库与文案（新增）
+│   ├── assets/strings/en.json   # 英文原版，保留，供切换
+│   ├── assets/strings/jp.json   # 日文官方版，保留
+│   ├── assets/images/           # 仅界面图标/装饰（插画已改为外链，不在仓库内）
+│   ├── css/                     # 加了中文字体回退
+│   └── js/
+├── serve.sh
+├── screenshots/             # 效果截图
+└── README.md
+```
+
+## 改了什么（共 4 处，都可回退）
+
+1. **牌库与文案中文化**：新增 `deck-zh/assets/strings/zh.json`（结构与官方 `en.json` 完全一致：`scales` / `strings` / `LensList`）。
+2. **设为默认语言**：把 `js/app.95e37080.js` 里内嵌的牌库数据替换为中文（原站是「无 `?lang` 参数 → 用内嵌英文」），并把默认语言标记改为 `zh`；同时把中文加进 `assets/json/languages.json` 的语言列表。这样首屏直接是中文，深链接（如 `#/menu/1`）也照常工作。
+3. **中文字体回退**：`css/app.css` 里 42 条 `font-family` 规则追加 `WenQuanYi Zen Hei / PingFang SC / 微软雅黑 / Noto Sans CJK SC` 等回退（跳过 `@font-face`，不影响原字体加载）。拉丁字母仍用原本的 DistrictPro，汉字落到系统中文字体。
+4. **插画外链化**：牌面大图、缩略图、牌背、首页扇形卡图、说明页示例牌一律删掉本地文件，路径改为 `https://deck.artofgamedesign.com/assets/images/...`；同时放宽 `index.html` 的 CSP（`img-src` 增加该域名），否则浏览器会拦掉跨域图片。
+5. **样式微调**：「十周年纪念版」标签在中文下改为居中。
+
+> 副作用：牌面图需要联网＋官方站点可用；官方若改动路径会显示占位图。想恢复离线版本，把 `lensArt/`、`lensart_Thumbs/` 从原站抓回本地、并把 `app.js` 里那 3 处绝对路径改回 `./assets/...` 即可。
+
+## 已知小差异
+
+- 说明页里的示例牌因为改成了外链，显示的是官方原版英文卡片图（文字部分仍是中文）。
+- 首页「十周年纪念版」标签沿用原版位置，会压在橙色像素装饰上，中文较短时对比度略低。
+- 排序菜单里的「字母序」对中文而言实际按拼音/字符序排列，与英文原版语义一致但观感不同。
+
+## 版权
+
+牌面文字、插画、书名与商标版权归 **Jesse Schell / Schell Games** 所有。本仓库只保存译文与代码，插画按原站地址引用、不复制分发；译文仅供个人学习参考，请勿商用。想支持作者请购买正版：
+
+- 书：<https://www.amazon.com/Art-Game-Design-Lenses-Third-dp-1138632058/dp/1138632058>
+- 实体牌：<https://www.amazon.com/Art-Game-Design-Deck-Lenses/dp/B0FVB9QQCJ>
+- 原站：<https://deck.artofgamedesign.com/>
+
+## 源码改动速查
+
+| 文件 | 作用 |
+|---|---|
+| `deck-zh/assets/strings/zh.json` | 全部中文牌库与界面文案（可单独替换/校对） |
+| `deck-zh/js/app.95e37080.js` | 内嵌数据替换为中文、默认语言 `zh`、插画路径改为官方绝对地址 |
+| `deck-zh/index.html` | CSP 的 `img-src` 放行 `https://deck.artofgamedesign.com` |
+| `deck-zh/css/app.4b9546c8.css` | 字族追加中文回退，末尾追加中文版样式微调 |
+| `deck-zh/assets/json/languages.json` | 语言列表加入「简体中文 / zh」 |
+
+想只改译文不必重编译：编辑 `assets/strings/zh.json` 后，同步更新 `app.js` 里内嵌的那段 JSON 即可（或加 `?lang=zh` 走运行时加载）。
