@@ -4,7 +4,13 @@ Jesse Schell《游戏设计艺术》配套「透镜牌」网页应用的简体�
 
 仓库只包含代码与译文，**不包含任何插画文件**——牌面插图、牌背、示例图在运行时直接向官方站点 <https://deck.artofgamedesign.com/> 请求。因此文字部分可离线使用，看图需要联网。
 
-## 打开
+## 在线访问
+
+**<https://cinatas.github.io/A-Deck-of-Lenses-In-Chinese/>**
+
+由 GitHub Pages 托管（`main` 分支 `/docs` 目录）。牌面插画走官方站外链，所以在线版本同样依赖 <https://deck.artofgamedesign.com/> 可访问。
+
+## 本地打开
 
 ```bash
 git clone https://github.com/Cinatas/A-Deck-of-Lenses-In-Chinese.git
@@ -14,7 +20,7 @@ cd A-Deck-of-Lenses-In-Chinese
 
 浏览器访问 **http://127.0.0.1:8899/** 即可（默认就是中文）。
 
-`serve.sh` 只是 `python3 -m http.server` 的包装，把 `deck-zh/` 目录托管到本地；用任何静态服务器（nginx、caddy、`npx serve`）指向 `deck-zh/` 也一样。
+`serve.sh` 只是 `python3 -m http.server` 的包装，把 `docs/` 目录托管到本地；用任何静态服务器（nginx、caddy、`npx serve`）指向 `docs/` 也一样。
 
 页面是竖屏手机比例，桌面浏览器建议把窗口收窄，或直接用手机/平板访问。右上角语言下拉可在 **简体中文 / English / 日本語** 之间切换。
 
@@ -37,7 +43,7 @@ cd A-Deck-of-Lenses-In-Chinese
 
 ```
 artofgamedesign/
-├── deck-zh/                 # 中文版整站（可直接拷走、放到任意静态服务器）
+├── docs/                 # 中文版整站（可直接拷走、放到任意静态服务器）
 │   ├── index.html
 │   ├── assets/strings/zh.json   # 中文牌库与文案（新增）
 │   ├── assets/strings/en.json   # 英文原版，保留，供切换
@@ -52,7 +58,7 @@ artofgamedesign/
 
 ## 改了什么（共 4 处，都可回退）
 
-1. **牌库与文案中文化**：新增 `deck-zh/assets/strings/zh.json`（结构与官方 `en.json` 完全一致：`scales` / `strings` / `LensList`）。
+1. **牌库与文案中文化**：新增 `docs/assets/strings/zh.json`（结构与官方 `en.json` 完全一致：`scales` / `strings` / `LensList`）。
 2. **设为默认语言**：把 `js/app.95e37080.js` 里内嵌的牌库数据替换为中文（原站是「无 `?lang` 参数 → 用内嵌英文」），并把默认语言标记改为 `zh`；同时把中文加进 `assets/json/languages.json` 的语言列表。这样首屏直接是中文，深链接（如 `#/menu/1`）也照常工作。
 3. **中文字体回退**：`css/app.css` 里 42 条 `font-family` 规则追加 `WenQuanYi Zen Hei / PingFang SC / 微软雅黑 / Noto Sans CJK SC` 等回退（跳过 `@font-face`，不影响原字体加载）。拉丁字母仍用原本的 DistrictPro，汉字落到系统中文字体。
 4. **插画外链化**：牌面大图、缩略图、牌背、首页扇形卡图、说明页示例牌一律删掉本地文件，路径改为 `https://deck.artofgamedesign.com/assets/images/...`；同时放宽 `index.html` 的 CSP（`img-src` 增加该域名），否则浏览器会拦掉跨域图片。
@@ -78,10 +84,10 @@ artofgamedesign/
 
 | 文件 | 作用 |
 |---|---|
-| `deck-zh/assets/strings/zh.json` | 全部中文牌库与界面文案（可单独替换/校对） |
-| `deck-zh/js/app.95e37080.js` | 内嵌数据替换为中文、默认语言 `zh`、插画路径改为官方绝对地址 |
-| `deck-zh/index.html` | CSP 的 `img-src` 放行 `https://deck.artofgamedesign.com` |
-| `deck-zh/css/app.4b9546c8.css` | 字族追加中文回退，末尾追加中文版样式微调 |
-| `deck-zh/assets/json/languages.json` | 语言列表加入「简体中文 / zh」 |
+| `docs/assets/strings/zh.json` | 全部中文牌库与界面文案（可单独替换/校对） |
+| `docs/js/app.95e37080.js` | 内嵌数据替换为中文、默认语言 `zh`、插画路径改为官方绝对地址 |
+| `docs/index.html` | CSP 的 `img-src` 放行 `https://deck.artofgamedesign.com` |
+| `docs/css/app.4b9546c8.css` | 字族追加中文回退，末尾追加中文版样式微调 |
+| `docs/assets/json/languages.json` | 语言列表加入「简体中文 / zh」 |
 
 想只改译文不必重编译：编辑 `assets/strings/zh.json` 后，同步更新 `app.js` 里内嵌的那段 JSON 即可（或加 `?lang=zh` 走运行时加载）。
